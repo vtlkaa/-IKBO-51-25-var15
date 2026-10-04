@@ -1,0 +1,5 @@
+ls -la
+cd /home
+echo $USERPROFILE
+ls
+exit
