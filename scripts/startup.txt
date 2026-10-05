@@ -1,7 +1,9 @@
 ls
-ls -la
-cd /home
-cd
-ls $USERPROFILE
-hello
+cd level1
+ls
+cd level2
+ls
+rev hello
+find file1.txt
+du
 exit
