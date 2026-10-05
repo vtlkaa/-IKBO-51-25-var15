@@ -1,6 +1,8 @@
 """Модуль эмулятора оболочки ОС."""
 import os
 import argparse
+import io
+import zipfile
 
 def expand_var(user_input):
     """Раскрывает переменные окружения в строке.
@@ -91,17 +93,43 @@ def run_script(script_path):
         print(f"Ошибка: файл {script_path} не найден")
 
 
+def load_vfs(vfs_path):
+    """Загружает VFS из ZIP-архива в память.
+
+    Args:
+        vfs_path: Путь к ZIP-архиву.
+
+    Returns:
+        Объект ZipFile, загруженный в память.
+        None, если архив не найден.
+    """
+    try:
+        with open(vfs_path, "rb") as f:
+            data = f.read()
+
+        buffer = io.BytesIO(data)
+        archive = zipfile.ZipFile(buffer)
+        return archive
+
+    except FileNotFoundError:
+        print(f"Ошибка: файл {vfs_path} не найден")
+        return None
+
 def main():
     """Главная функция эмулятора."""
-
     args = parse_argument()
 
     print(f"VFS: {args.vfs}")
     print(f"Script: {args.script}")
 
+    vfs = None
+    if args.vfs:
+        vfs = load_vfs(args.vfs)
+        if vfs:
+            print(f"VFS загружена. Файлов: {len(vfs.namelist())}")
+
     if args.script:
         run_script(args.script)
-
     print("Добро пожаловать в эмулятор оболочки!")
     user_vfs = "my_vfs"
 
@@ -109,7 +137,7 @@ def main():
         try:
             user_input = input(f"{user_vfs}> ")
         except KeyboardInterrupt:
-            print("\nДля выхода введите 'exit'")
+            print("Для выхода введите 'exit'")
             continue
 
         expanded = expand_var(user_input)

@@ -1,5 +1,7 @@
+ls
 ls -la
 cd /home
-echo $USERPROFILE
-ls
+cd
+ls $USERPROFILE
+hello
 exit
