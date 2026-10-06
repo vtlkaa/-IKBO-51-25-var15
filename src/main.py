@@ -252,7 +252,7 @@ def main():
             if names:
                 current_dir = names[0]
 
-    if args.script:
+    if args.script and vfs:
         current_dir = run_script(args.script, vfs, current_dir)
 
     print("Добро пожаловать в эмулятор оболочки!")
