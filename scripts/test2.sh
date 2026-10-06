@@ -1,2 +1,2 @@
 #!/bin/bash
-python src/main.py --vfs C:/vfs.zip
+python src/main.py --vfs vfs/vfs.zip

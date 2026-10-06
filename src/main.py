@@ -4,6 +4,7 @@ import argparse
 import io
 import zipfile
 
+
 def expand_var(user_input):
     """Раскрывает переменные окружения в строке.
     Args:
@@ -13,6 +14,7 @@ def expand_var(user_input):
         Строка с раскрытыми переменными окружения.
     """
     return os.path.expandvars(user_input)
+
 
 def parse_command(expanded_input):
     """Разбирает команду на имя и аргументы.
@@ -52,6 +54,7 @@ def execute_command(command, args, vfs, current_dir):
         print(f"Ошибка: команда '{command}' не найдена.")
         return True, current_dir
 
+
 def parse_argument():
     """Разбирает параметры командной строки.
 
@@ -62,19 +65,20 @@ def parse_argument():
 
     parser.add_argument(
         "--vfs",
-        type = str,
-        default= None,
-        help = "Путь к расположению VFS"
+        type=str,
+        default=None,
+        help="Путь к расположению VFS"
     )
 
     parser.add_argument(
-            "--script",
-            type = str,
-            default= None,
-            help = "Путь к скрипту"
-        )
+        "--script",
+        type=str,
+        default=None,
+        help="Путь к скрипту"
+    )
 
     return parser.parse_args()
+
 
 def run_script(script_path, vfs, current_dir):
     try:
@@ -95,7 +99,6 @@ def run_script(script_path, vfs, current_dir):
                 keep_going, current_dir = execute_command(command, cmd_args, vfs, current_dir)
                 if not keep_going:
                     break
-
 
     except FileNotFoundError:
         print(f"Ошибка: файл {script_path} не найден")
@@ -125,6 +128,7 @@ def load_vfs(vfs_path):
         print(f"Ошибка: файл {vfs_path} не найден")
         return None
 
+
 def cmd_ls(vfs, current_dir):
     """Выводит содержимое текущей директории."""
     names = vfs.namelist()
@@ -134,12 +138,12 @@ def cmd_ls(vfs, current_dir):
             continue
         if name.startswith(current_dir):
             rest = name[len(current_dir):]
-            # Берём только первый компонент
             first = rest.split("/")[0]
             if first:
                 items.add(first + ("/" if "/" in rest else ""))
     for item in sorted(items):
         print(item)
+
 
 def cmd_cd(args, vfs, current_dir):
     """Меняет текущую директорию.
@@ -167,6 +171,7 @@ def cmd_cd(args, vfs, current_dir):
         print(f"Ошибка: директория '{target}' не найдена")
         return current_dir
 
+
 def cmd_rev(args):
     """Реверсирует строку.
 
@@ -179,6 +184,7 @@ def cmd_rev(args):
 
     text = args[0]
     print(text[::-1])
+
 
 def cmd_find(args, vfs):
     """Ищет файлы по имени.
@@ -203,6 +209,7 @@ def cmd_find(args, vfs):
     if not found:
         print(f"Файл '{target}' не найден")
 
+
 def cmd_du(vfs, current_dir):
     """Выводит размер файлов в текущей директории.
 
@@ -225,6 +232,7 @@ def cmd_du(vfs, current_dir):
                 total += size
 
     print(f"Итого: {total} байт")
+
 
 def main():
     """Главная функция эмулятора."""
@@ -263,6 +271,7 @@ def main():
         keep_going, current_dir = execute_command(command, cmd_args, vfs, current_dir)
         if not keep_going:
             break
+
 
 if __name__ == "__main__":
     main()
